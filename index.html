@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Editor</title>
+  </head>
+  <body>
+    <h1>File Editor</h1>
+    <form method="POST" action="upload.php" enctype="multipart/form-data">
+      <input type="file" name="file" /><br />
+      <input type="submit" value="Upload" />
+    </form>
+    <?php
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $filename = $_FILES['file']['name'];
+        $filetype = $_FILES['file']['type'];
+        $filesize = $_FILES['file']['size'];
+        $filetmpname = $_FILES['file']['tmp_name'];
+        $fileerror = $_FILES['file']['error'];
+        if ($fileerror == UPLOAD_ERR_OK) {
+          $filecontents = file_get_contents($filetmpname);
+          echo "<h2>$filename</h2>";
+          echo "<form method='POST' action='save.php'>";
+          echo "<textarea name='contents' rows='10' cols='50'>$filecontents</textarea>";
+          echo "<br /><input type='submit' value='Save' />";
+          echo "</form>";
+        } else {
+          echo "Error uploading file: $fileerror";
+        }
+      }
+    ?>
+  </body>
+</html>
